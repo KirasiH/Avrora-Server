@@ -1,0 +1,58 @@
+from DB.clientDB.clientDB import ClientBD
+from DB.IClientDB import IClientBD
+from DB.Cache.Cache import Cache
+
+from UserClass.DataUser import DataUser
+
+
+class ClientDBProxy(IClientBD):
+
+    def __init__(self):
+        self.clientBD = ClientBD()
+
+        for user in self.clientBD.All_users():
+            print(f"{user.nickname} {user.name} \n")
+            Cache.set_user(DataUser.FromUser(user))
+
+    def check_user(self, data: DataUser) -> bool:
+
+        if not Cache.get_user(data):
+            return False
+
+        return True
+
+    def recv_user(self, old_data: DataUser, new_data: DataUser) -> bool:
+
+        if not Cache.check_key(old_data):
+            return False
+
+        Cache.recv_user(old_data, new_data)
+
+        self.clientBD.recv_user(old_data, new_data)
+
+        return True
+
+    def set_user(self, data: DataUser) -> bool:
+
+        if Cache.check_user(data):
+            return False
+
+        _id = self.clientBD.set_user(data)
+
+        Cache.set_user(data.ToUser())
+
+        return True
+
+    def delete_user(self, data: DataUser) -> bool:
+
+        if not Cache.check_key(data):
+            return False
+
+        Cache.delete_user(data)
+
+        self.clientBD.delete_user(data)
+
+        return True
+
+
+
