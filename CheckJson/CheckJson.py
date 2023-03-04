@@ -20,6 +20,22 @@ class CheckJson:
         "type"
     ]
 
+    keys_userdata_create = [
+        "old_user",
+        "new_user"
+    ]
+
+    @staticmethod
+    def CheckUserDataRecreate(_dict: dict):
+
+        try:
+            for key in CheckJson.keys_userdata_create:
+                data = _dict[key]
+
+        except:
+            return False
+
+        return True
     @staticmethod
     def CheckUserData(_dict: dict):
 

@@ -11,7 +11,6 @@ class ClientDBProxy(IClientBD):
         self.clientBD = ClientBD()
 
         for user in self.clientBD.All_users():
-            print(f"{user.nickname} {user.name} \n")
             Cache.set_user(DataUser.FromUser(user))
 
     def check_user(self, data: DataUser) -> bool:

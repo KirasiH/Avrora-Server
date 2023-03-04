@@ -43,6 +43,9 @@ def recv_user():
 
     _dict = request.json
 
+    if not CheckJson.CheckUserDataRecreate(_dict):
+        return "Error data"
+
     _dict_old_data = _dict["old_user"]
     _dict_new_data = _dict["new_user"]
 
