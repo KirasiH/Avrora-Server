@@ -2,6 +2,7 @@ from typing import Dict
 from UserClass.User import User
 from UserClass.DataUser import DataUser
 
+import hashlib
 
 class Cache:
 
@@ -42,7 +43,11 @@ class Cache:
     @staticmethod
     def recv_user(old_data: DataUser, new_data: DataUser):
 
-        Cache.__DictUser[old_data.nickname] = new_data.ToUser()
+        Cache.__DictUser.pop(old_data.nickname)
+
+        Cache.__DictUser[new_data.nickname] = new_data.ToUser()
+
+        print(Cache.__DictUser)
 
     @staticmethod
     def check_key(data: DataUser) -> bool:
@@ -50,14 +55,12 @@ class Cache:
         if not Cache.check_user(data):
             return False
 
-        try:
-            user = Cache.__DictUser[data.nickname]
-        except:
-            return False
+        user = Cache.__DictUser[data.nickname]
 
-        else:
-            if (user.first_key == data.first_key) and (user.second_key == data.second_key):
-                return True
+        if (user.first_key == data.first_key) and (user.second_key == user.second_key):
+            return True
+
+        return False
 
     @staticmethod
     def check_user(data: DataUser) -> bool:

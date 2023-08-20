@@ -20,15 +20,15 @@ class MessagesCache:
         MessagesCache.__DictMessages[message.whom].append(message)
 
     @staticmethod
-    def set_message(data: DataUser):
+    def get_message(data: DataUser):
 
         try:
-            data = MessagesCache.__DictMessages[data.nickname]
-
+            messages = MessagesCache.__DictMessages[data.nickname]
+            message = messages.pop(0)
         except:
             return None
 
-        return data.pop(0)
+        return message
 
     @staticmethod
     def del_message(data: DataUser):

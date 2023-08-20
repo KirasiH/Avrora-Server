@@ -6,10 +6,7 @@ from Core.MessagesCache.Messages import Message
 
 from CheckJson.CheckJson import CheckJson
 
-
 clientDB = ClientDBProxy()
-
-
 app = Flask(__name__)
 
 
@@ -62,6 +59,11 @@ def send_message():
 
     _dict = request.json
 
+    print(_dict)
+
+    if not CheckJson.CheckUserData(_dict["user"]):
+        return "Error data"
+
     if not Core.send_message(Message.FromDict(_dict), DataUser.FromDict(_dict["user"])):
         return "Error Message"
 
@@ -80,10 +82,11 @@ def recv_message():
     if not message:
         return "Error"
 
-    return jsonify(json={"Sender name": message.sender_name,
-                         "Sender nickname": message.sender_nickname,
-                         "Whom": message.whom,
-                         "Content": message.content})
+    return jsonify(json={"sender_name": message.sender_name,
+                         "sender_nickname": message.sender_nickname,
+                         "whom": message.whom,
+                         "content": message.content,
+                         "type": message.type_content})
 
 
 def main():
